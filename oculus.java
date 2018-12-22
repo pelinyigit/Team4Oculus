@@ -25,5 +25,6 @@ public class Oculus
        oculus.insertIntoTable(4, "Yamaç");
        oculus.insertIntoTable(5, "Ata");
        oculus.Display(); // displaying the table's data
+       oculus.DBShutdown(); //shutting down the database when it is not needed 
     } 
 }
