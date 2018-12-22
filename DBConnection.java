@@ -26,6 +26,15 @@ public class DBConnection
         }
            }
     
+     public void  DBShutdown()
+    {
+        try {
+            DriverManager.getConnection("jdbc:derby:DERBYDB;shutdown=true");
+        } catch (SQLException ex) {
+            Logger.getLogger(DBConnection.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
      public void createTable()
 {
         try {
