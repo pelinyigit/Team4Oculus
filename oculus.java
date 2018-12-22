@@ -4,29 +4,26 @@
  * and open the template in the editor.
  */
 package oculus;
-
 /**
  *
- * @author team_4_oculus
+ * @author team_oculus
  */
 public class Oculus 
 {
-
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) 
     {
-       DBConnection db = new DBConnection();
+       DBConnection oculus;
        
-       db.createTable();
-       db.insertIntoTable("Şükrü");
-       db.insertIntoTable("Pelin");
-       db.insertIntoTable("Beyza");
-       db.insertIntoTable("Ata");
-       db.insertIntoTable("Yamaç");
-       db.Display();
+       oculus = new DBConnection();       
+       oculus.createTable(); //create table function for database embedded server 
+       oculus.insertIntoTable(1, "Şükrü");
+       oculus.insertIntoTable(2, "Pelin");
+       oculus.insertIntoTable(3, "Beyza");
+       oculus.insertIntoTable(4, "Yamaç");
+       oculus.insertIntoTable(5, "Ata");
+       oculus.Display(); // displaying the table's data
     } 
 }
-
-  
