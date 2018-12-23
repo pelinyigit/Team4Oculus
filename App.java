@@ -1,4 +1,4 @@
-package softwarepulse.app;
+package connectsqlit;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
