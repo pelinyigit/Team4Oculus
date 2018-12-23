@@ -1,4 +1,4 @@
-package softwarepulse.app;
+package connectsqlit;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
