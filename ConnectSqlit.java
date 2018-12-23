@@ -1,4 +1,4 @@
-package connectsqlit;
+package softwarepulse.app;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -8,68 +8,84 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class ConnectSqlit {
+	 private static Connection con;
+	 private static boolean hasData = false;
+	 
+	 private void getConnection() throws ClassNotFoundException, SQLException {
+		  // sqlite driver
+		  Class.forName("org.sqlite.JDBC");
+		  // database path, if it's new database, it will be created in the project folder
+		  con = DriverManager.getConnection("jdbc:sqlite:Oculus.db");
+		  initialise();
+	 }
+	 
 
-   private static Connection con;
-   private static  boolean hasData = false;
-   
-   public ResultSet displayUsers() throws SQLException, ClassNotFoundException
-   {
-       if(con == null)
-       {
-           getConnection();
-       }
-       Statement state = con.createStatement();
-       ResultSet res = state.executeQuery("SELECT fname , lname FROM user");
-       return res;
-   }
-   
- 
-    private void getConnection() throws ClassNotFoundException, SQLException 
-    {
-        Class.forName("org.sqlite.JDBC");
-        con = DriverManager.getConnection("jdbc:sqlite:Oculus.db");
-        initialise();
-    }
+	public void addUser(String firstname, String lastname) throws ClassNotFoundException, SQLException {
+		 if(con == null) {
+			 // get connection
+			 getConnection();
+		 }
+		  PreparedStatement prep = con
+				    .prepareStatement("insert into creators values(?,?,?);");
+				  prep.setString(2, firstname);
+				  prep.setString(3, lastname);
+				  prep.execute();
+		 
+	 }
+	 
+	 public ResultSet displayUsers() throws SQLException, ClassNotFoundException {
+		 if(con == null) {
+			 // get connection
+			 getConnection();
+		 }
+		 Statement state = con.createStatement();
+		 ResultSet res = state.executeQuery("select fname, lname from creators");
+		 return res;
+	 }
+	 
+	 private void initialise() throws SQLException {
+		 if( !hasData ) {
+			 hasData = true;
+			 // check for database table
+			 Statement state = con.createStatement();
+			 ResultSet res = state.executeQuery("SELECT name FROM sqlite_master WHERE type='table' AND name='creators'");
+			 if( !res.next()) {
+				 System.out.println("Building the User table with prepopulated values.");
+				 // need to build the table
+				  Statement state2 = con.createStatement();
+				  state2.executeUpdate("create table creators(id integer,"
+				    + "fName varchar(60)," + "lname varchar(60)," + "primary key (id));");
 
-    private void initialise() throws SQLException 
-    {
-       if(!hasData)
-       {
-           hasData = true;
-           
-           Statement state = con.createStatement();
-           ResultSet res = state.executeQuery("SELECT name FROM sqlite_master WHERE type='table' AND name='user'");
-           if(!res.next())
-           {
-               System.out.println("Building the User table with prepopulated values");
-               
-               Statement state2 = con.createStatement();
-               state2.execute("CREATE TABLE user(id integer,"
-               + "fName varchar(60)," + "lName varchar(60),"
-               + "primary key(id)");
-               
-               //inserting synthetic load //
-               PreparedStatement prep = con.prepareStatement("INSERT INTO user values(?,?,?); ");
-               prep.setString(2, "Şükrü");
-               prep.setString(3, "Yamaç");
-               prep.setString(4, "Pelin");
-               prep.setString(5, "Beyza");
-               prep.setString(6, "Ata");
-           }
-       }
-    }
-    
-    public void addUser(String firstname , String lastName) throws ClassNotFoundException, SQLException
-    {
-        if(con == null)
-        {
-            getConnection();
-        }
-        
-        PreparedStatement prep = con.prepareStatement("INSERT INTO user values (?, ?, ?);");
-        prep.setString(2, firstname);
-        prep.setString(3, lastName);
-        prep.execute();
-    }
-    
+				  // inserting some sample data
+				  PreparedStatement prep = con.prepareStatement("insert into creators values(?,?,?);");
+				  prep.setString(2, "Atahan");
+				  prep.setString(3, "Ekici");
+				  prep.execute();
+				  
+				  PreparedStatement prep2 = con.prepareStatement("insert into creators values(?,?,?);");
+				  prep2.setString(2, "Yamac");
+				  prep2.setString(3, "Kayseri");
+				  prep2.execute();
+                                  
+                                  PreparedStatement prep3 = con.prepareStatement("insert into creators values(?,?,?);");
+				  prep3.setString(2, "Şükrü");
+				  prep3.setString(3, "Kaplan");
+				  prep3.execute();
+                                  
+                                  PreparedStatement prep4 = con.prepareStatement("insert into creators values(?,?,?);");
+				  prep4.setString(2, "Beyza");
+				  prep4.setString(3, "Korkmaz");
+				  prep4.execute();
+                                  
+                                  PreparedStatement prep5 = con.prepareStatement("insert into creators values(?,?,?);");
+				  prep5.setString(2, "Pelin");
+				  prep5.setString(3, "Yiğit");
+				  prep5.execute();
+                                  
+                                 
+			 }
+			 
+		 }
+	 }
+	 
 }
