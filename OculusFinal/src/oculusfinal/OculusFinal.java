@@ -12,9 +12,11 @@ public class OculusFinal
         
         db.getConnection();
         db.createtable("araba");
-        db.addAttributeInt( "araba" , "beygir_gücü" );
-        db.addAttributeVarchar("araba", "marka");
-        db.addAttributeBoolean("araba","model");
+        db.createtable("music");
+        db.createtable("books");
+        db.renametable("araba", "vosvos");
+        db.DisplayTables();
+        
     }
     
 }

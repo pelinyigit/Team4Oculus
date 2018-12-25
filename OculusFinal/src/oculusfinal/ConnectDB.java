@@ -6,6 +6,7 @@
 package oculusfinal;
 
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -34,7 +35,7 @@ public class ConnectDB
            getConnection();
          }
         PreparedStatement createdb;
-        createdb = con.prepareStatement(" create table " + tablename + " (id integer , name varchar(50) default unknown , Is_favourite boolean default 0 , primary key(id));");
+        createdb = con.prepareStatement(" create table if not exists " + tablename + " (id integer , name varchar(50) default unknown , Is_favourite boolean default 0 , primary key(id));");
         createdb.execute();      
     }
     
@@ -47,6 +48,18 @@ public class ConnectDB
         PreparedStatement addAttributeInt;
         addAttributeInt = con.prepareStatement(" alter table " + tablename + " add " + attribute + " int default 0;");
         addAttributeInt.execute();
+    }
+    
+    public void renametable(String tablename , String new_name) throws SQLException, ClassNotFoundException
+    {
+        if(con == null)
+        {
+           getConnection();
+        }
+        
+        PreparedStatement renametable;
+        renametable = con.prepareStatement(" alter table " + tablename + " rename to " + new_name + " ;");
+        renametable.execute();        
     }
     
      public void addAttributeVarchar(String tablename ,String attribute) throws SQLException, ClassNotFoundException
@@ -89,7 +102,7 @@ public class ConnectDB
            getConnection();
          }
         PreparedStatement deleteAttribute;
-        deleteAttribute = con.prepareStatement(" alter table " + tablename + " drop column " + attribute + ";");
+        deleteAttribute = con.prepareStatement(" ALTER TABLE " + tablename + " DROP COLUMN " + attribute + ";");
         deleteAttribute.execute();   
       }
       public void droptable(String tablename) throws SQLException, ClassNotFoundException
@@ -132,7 +145,7 @@ public class ConnectDB
            getConnection();
         }
           PreparedStatement insertDouble;
-          insertDouble = con.prepareStatement("insert into  "+tablename+" values add "+attribute+" real;");
+          insertDouble = con.prepareStatement("insert into  "+tablename+" values add "+attribute+" real default;");
           insertDouble.execute();
       }
 
@@ -171,15 +184,18 @@ public class ConnectDB
           displaytable.execute();        
       }
       
-        public void DisplayAll() throws SQLException, ClassNotFoundException
+        public void DisplayTables() throws SQLException, ClassNotFoundException
       {
-          if(con == null)
+       if(con == null)
         {
            getConnection();
-         }
-           PreparedStatement DisplayAll;
-           DisplayAll = con.prepareStatement(" SELECT * FROM sqlite_master WHERE type= 'table' ");
-           DisplayAll.execute();
+        }
+           DatabaseMetaData md = con.getMetaData();
+           ResultSet rs = md.getTables(null, null, "%", null);
+           while (rs.next()) 
+           {
+             System.out.println(rs.getString(3));
+           }
       }
       
         public int row_size() throws ClassNotFoundException, SQLException
@@ -189,7 +205,7 @@ public class ConnectDB
            getConnection();
          }
             
-            String row_size = "SELECT COUNT(*) from sqlite_master WHERE type= 'table'";
+            String row_size = "SELECT COUNT(*) FROM sqlite_master WHERE type='table'";
             ResultSet rs = con.createStatement().executeQuery(row_size);
              
       if (rs.next()) 
@@ -201,4 +217,15 @@ public class ConnectDB
         else
           return 1;
         }
+        
+        public void terminal(String a) throws SQLException, ClassNotFoundException
+      {
+          if(con == null)
+        {
+           getConnection();
+         }
+          PreparedStatement displaytable;
+          displaytable = con.prepareStatement("  "+a+" ");
+          displaytable.execute();        
+      }
 }
