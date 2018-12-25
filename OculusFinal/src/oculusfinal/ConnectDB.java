@@ -12,6 +12,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 /**
  *
@@ -35,7 +36,10 @@ public class ConnectDB
            getConnection();
          }
         PreparedStatement createdb;
+        PreparedStatement createdb2;
+        createdb2 = con.prepareStatement("DROP TABLE IF EXISTS " + tablename + " ; ");
         createdb = con.prepareStatement(" create table if not exists " + tablename + " (id integer , name varchar(50) default unknown , Is_favourite boolean default 0 , primary key(id));");
+        createdb2.execute();
         createdb.execute();      
     }
     
@@ -59,7 +63,8 @@ public class ConnectDB
         
         PreparedStatement renametable;
         renametable = con.prepareStatement(" alter table  " + tablename + " rename to " + new_name + " ;");
-        renametable.execute();        
+        renametable.execute();
+        manuallyvacuumDB();        
     }
     
      public void addAttributeVarchar(String tablename ,String attribute) throws SQLException, ClassNotFoundException
@@ -103,7 +108,8 @@ public class ConnectDB
          }
         PreparedStatement deleteAttribute;
         deleteAttribute = con.prepareStatement(" ALTER TABLE " + tablename + " DROP COLUMN " + attribute + ";");
-        deleteAttribute.execute();   
+        deleteAttribute.execute(); 
+        manuallyvacuumDB();
       }
       
       public void droptable(String tablename) throws SQLException, ClassNotFoundException
@@ -115,6 +121,7 @@ public class ConnectDB
           PreparedStatement droptable;
           droptable = con.prepareStatement(" DROP TABLE if exists " + tablename + "");        
           droptable.execute();
+          manuallyvacuumDB();
       }
       
       public void manuallyvacuumDB() throws ClassNotFoundException, SQLException
@@ -174,12 +181,12 @@ public class ConnectDB
          findontableitem.execute();
     
     }
-      public void displaytable(String tablename) throws SQLException, ClassNotFoundException
+      public void displaySpecifictable(String tablename) throws SQLException, ClassNotFoundException
       {
           if(con == null)
         {
            getConnection();
-         }
+        }
           PreparedStatement displaytable;
           displaytable = con.prepareStatement("select * from  " + tablename + " ");
           displaytable.execute();        
@@ -197,56 +204,94 @@ public class ConnectDB
           displaytable.execute();        
       }
       
-        public void DisplayTables() throws SQLException, ClassNotFoundException
+        public void DisplayAllTables() throws SQLException, ClassNotFoundException
       {
        if(con == null)
         {
            getConnection();
         }
            DatabaseMetaData md = con.getMetaData();
-           ResultSet rs = md.getTables(null, null, "%", null);
-           while (rs.next()) 
+           ResultSet rs = md.getTables(null, null, "%", null);           
+            
+           while(rs.next())
            {
-             System.out.println(rs.getString(3));
-           }
+                System.out.println(rs.getString(3));
+           }   
       }
-         public String DisplayTablesreturns() throws SQLException, ClassNotFoundException
-      {
+
+         public ArrayList<String> DisplayAllTablesReturns() throws SQLException, ClassNotFoundException
+   {   
        if(con == null)
         {
            getConnection();
         }
+
+           ArrayList<String> mylist = new ArrayList<>();
            DatabaseMetaData md = con.getMetaData();
-           ResultSet rs = md.getTables(null, null, "%", null);
-           while (rs.next()) 
+           ResultSet rs = md.getTables(null, null, "%", null);           
+            
+           while(rs.next())
            {
-             String tablename = rs.getString(3);
-             return tablename;
+               mylist.add(rs.getString(3));
            }
-           return null;
-      }
-         /*
-         public int calculaterownumber(String tablename) throws ClassNotFoundException, SQLException
-         {
+         return (mylist);
+   
+  }
+
+        
+         public int getTotalColumn() throws ClassNotFoundException, SQLException
+  {
         if(con == null)
         {
            getConnection();
         }
         
-        Statement state = this.con.createStatement();
-        ResultSet result = 
+        ArrayList<String> data = DisplayAllTablesReturns();
+        Statement state = ConnectDB.con.createStatement();
+        String tablename;
+        int result = 0;
         
-         }
-      */
-        
-        public void terminal(String a) throws SQLException, ClassNotFoundException
+        for(int i=0; i<data.size();i++)
+        {
+            tablename = data.get(i);
+            ResultSet rs =  state.executeQuery("select count(*) from " + tablename + " ");
+            
+            while(rs.next())
+            {
+                result = rs.getInt(1);
+            }
+        }
+ return result;
+   }
+
+        public void Terminal(String a) throws SQLException, ClassNotFoundException
       {
           if(con == null)
-        {
+         {
            getConnection();
          }
           PreparedStatement displaytable;
           displaytable = con.prepareStatement("  "+a+" ");
           displaytable.execute();        
+      }
+        
+        
+        public int  getTotalRow() throws SQLException, ClassNotFoundException
+      {
+          
+          if(con == null)
+        {
+           getConnection();
+         }
+          
+          int sayı = 0;
+          Statement  getTotalRow = ConnectDB.con.createStatement();
+          ResultSet rs =  getTotalRow.executeQuery("select count(*) from sqlite_master where type = 'table'  ");
+          
+          if(rs.next())
+          {
+               sayı = rs.getInt(1);
+          }
+          return sayı;
       }
 }

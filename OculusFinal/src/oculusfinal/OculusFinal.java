@@ -11,12 +11,30 @@ public class OculusFinal
         ConnectDB db = new ConnectDB();
         
         db.getConnection();
-        db.createtable("araba");
-        db.createtable("music");
-        db.createtable("books");
-        db.renametable("araba", "vosvos");
-        db.DisplayTables();
+/*
+        db.createtable("cars");
+        db.createtable("musics");
+        db.createtable("vosvos");
+        db.createtable("graphicscards");
+        db.renametable("vosvos", "araba");
+        db.createtable("god");
+        db.addAttributeInt("god", "power");
         
-    }
-    
+  */      
+        db.DisplayAllTables();
+     
+        System.out.println(db.getTotalRow());    
+        System.out.println(db.DisplayAllTablesReturns());
+        System.out.println(db.getTotalRow());
+
+/* 
+        db.Terminal("");
+        db.Terminal("");
+        db.Terminal("");
+        db.Terminal("");
+        db.Terminal("");
+        db.Terminal("");
+        db.Terminal("");
+       */
+    } 
 }
