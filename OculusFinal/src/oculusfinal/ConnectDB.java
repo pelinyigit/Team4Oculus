@@ -58,7 +58,7 @@ public class ConnectDB
         }
         
         PreparedStatement renametable;
-        renametable = con.prepareStatement(" alter table " + tablename + " rename to " + new_name + " ;");
+        renametable = con.prepareStatement(" alter table  " + tablename + " rename to " + new_name + " ;");
         renametable.execute();        
     }
     
@@ -105,6 +105,7 @@ public class ConnectDB
         deleteAttribute = con.prepareStatement(" ALTER TABLE " + tablename + " DROP COLUMN " + attribute + ";");
         deleteAttribute.execute();   
       }
+      
       public void droptable(String tablename) throws SQLException, ClassNotFoundException
       {
           if(con == null)
@@ -112,8 +113,20 @@ public class ConnectDB
            getConnection();
          }
           PreparedStatement droptable;
-          droptable = con.prepareStatement(" DROP TABLE [IF EXISTS] " + tablename + ";");
+          droptable = con.prepareStatement(" DROP TABLE if exists " + tablename + "");        
           droptable.execute();
+      }
+      
+      public void manuallyvacuumDB() throws ClassNotFoundException, SQLException
+      {
+           if(con == null)
+        {
+           getConnection();
+         }
+           
+          PreparedStatement vacuum;
+          vacuum = con.prepareStatement(" VACUUM;");
+          vacuum.execute();
       }
              
       public void insertInt(String tablename , int attribute) throws SQLException, ClassNotFoundException  
@@ -197,26 +210,34 @@ public class ConnectDB
              System.out.println(rs.getString(3));
            }
       }
-      
-        public int row_size() throws ClassNotFoundException, SQLException
-        {
-            if(con == null)
+         public String DisplayTablesreturns() throws SQLException, ClassNotFoundException
+      {
+       if(con == null)
         {
            getConnection();
-         }
-            
-            String row_size = "SELECT COUNT(*) FROM sqlite_master WHERE type='table'";
-            ResultSet rs = con.createStatement().executeQuery(row_size);
-             
-      if (rs.next()) 
-    {            
-        int row_number = 0;
-        rs.getInt(row_number);
-        return row_number;
-    }
-        else
-          return 1;
         }
+           DatabaseMetaData md = con.getMetaData();
+           ResultSet rs = md.getTables(null, null, "%", null);
+           while (rs.next()) 
+           {
+             String tablename = rs.getString(3);
+             return tablename;
+           }
+           return null;
+      }
+         /*
+         public int calculaterownumber(String tablename) throws ClassNotFoundException, SQLException
+         {
+        if(con == null)
+        {
+           getConnection();
+        }
+        
+        Statement state = this.con.createStatement();
+        ResultSet result = 
+        
+         }
+      */
         
         public void terminal(String a) throws SQLException, ClassNotFoundException
       {
