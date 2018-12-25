@@ -11,7 +11,10 @@ public class OculusFinal
         ConnectDB db = new ConnectDB();
         
         db.getConnection();
-        db.createtable("tablo2");
+        db.createtable("araba");
+        db.addAttributeInt( "araba" , "beygir_gücü" );
+        db.addAttributeVarchar("araba", "marka");
+        db.addAttributeBoolean("araba","model");
     }
     
 }
