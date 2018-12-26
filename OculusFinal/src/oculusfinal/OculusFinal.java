@@ -11,7 +11,7 @@ public class OculusFinal
         ConnectDB db = new ConnectDB();
         
         db.getConnection();
-/*
+
         db.createtable("rap");
         db.createtable("Vosvos");
         db.createtable("Graphicscards");
@@ -19,17 +19,15 @@ public class OculusFinal
         
         db.renametable("vosvos", "Cars");
         db.renametable("rap", "Musics");
-*/   
+  
         db.DisplayAllTables();
         
         System.out.println(db.DisplayAllTablesReturns());
         System.out.println(db.getTotalColumn());
         System.out.println(db.getTotalRow()); 
         
- /*       
-        db.addAttributeInt("Cars", "hp");
-        db.insertInt("Cars", "hp", 100);
- */        
+       
+
         
 /* 
         db.Terminal("");
