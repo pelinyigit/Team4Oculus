@@ -13,6 +13,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -41,14 +44,16 @@ public class ConnectDB
         {
            getConnection();
          }
+        try {
         PreparedStatement createdb;
-        PreparedStatement createdb2;
-        createdb2 = con.prepareStatement("DROP TABLE IF EXISTS " + tablename + " ; ");
         createdb = con.prepareStatement(" create table if not exists " + tablename + " (id integer , name varchar(50) default unknown , Is_favourite boolean default 0 , primary key(id));");
-        createdb2.execute();
-        createdb.execute();      
+        createdb.execute();
+        } catch (SQLException e) {
+                    
+           System.out.println(e.getCause());            
     }
-    
+        
+   }
     /**
      *
      * @param tablename
@@ -62,9 +67,34 @@ public class ConnectDB
         {
            getConnection();
          }
+        
+        try {
         PreparedStatement addAttributeInt;
         addAttributeInt = con.prepareStatement(" alter table " + tablename + " add " + attribute + " int default 0;");
         addAttributeInt.execute();
+        } catch (SQLException e) {
+                    
+           System.out.println(e.getCause());            
+    }
+    }
+    
+    public void createItem(String tablename) throws ClassNotFoundException, SQLException
+    {
+        if(con == null)
+        {
+           getConnection();
+        }
+ 
+        try {
+            int Total_Row = getTotalRowTable("tablename");
+            PreparedStatement createItem;
+            createItem = con.prepareStatement(" insert into " + tablename + " (id)  values ( ' " + Total_Row + " ' );");
+            createItem.execute();
+            
+        } catch (SQLException e) {       
+           System.out.println(e.getCause());            
+    }
+        
     }
     
     /**
@@ -81,10 +111,15 @@ public class ConnectDB
            getConnection();
         }
         
+         try {
         PreparedStatement renametable;
         renametable = con.prepareStatement(" alter table  " + tablename + " rename to " + new_name + " ;");
         renametable.execute();
-        manuallyvacuumDB();        
+        manuallyvacuumDB();   
+        } catch (SQLException e) {
+                    
+           System.out.println(e.getCause());            
+    }
     }
     
     /**
@@ -100,9 +135,16 @@ public class ConnectDB
         {
            getConnection();
         }
+        
+         try {
         PreparedStatement addAttributeVarchar; 
         addAttributeVarchar = con.prepareStatement(" alter table " + tablename + " add " + attribute + " varchar(50) default unknown;");
         addAttributeVarchar.execute();
+        } catch (SQLException e) 
+        {
+                    
+           System.out.println(e.getCause());            
+    }
     }
      
     /**
@@ -118,9 +160,16 @@ public class ConnectDB
         {
            getConnection();
          }
+        
+         try {
         PreparedStatement addAttributeBoolean;
         addAttributeBoolean = con.prepareStatement(" alter table " + tablename + " add " + attribute + " boolean default 0;");
-        addAttributeBoolean.execute();        
+        addAttributeBoolean.execute();   
+        } catch (SQLException e) 
+        {
+                    
+           System.out.println(e.getCause());            
+    }
     }
       
     /**
@@ -136,9 +185,16 @@ public class ConnectDB
         {
            getConnection();
          }
+        
+        try {
         PreparedStatement addAttributeDouble;
-        addAttributeDouble = con.prepareStatement(" alter table " + tablename + " add " + attribute + " double default 0.);");
-        addAttributeDouble.execute();        
+        addAttributeDouble = con.prepareStatement(" alter table " + tablename + " add " + attribute + " real default 0.);");
+        addAttributeDouble.execute(); 
+        } catch (SQLException e) 
+        {
+                    
+           System.out.println(e.getCause());            
+    }
     }
       
     /**
@@ -154,10 +210,17 @@ public class ConnectDB
         {
            getConnection();
          }
+          
+          try {
         PreparedStatement deleteAttribute;
         deleteAttribute = con.prepareStatement(" ALTER TABLE " + tablename + " DROP COLUMN " + attribute + ";");
         deleteAttribute.execute(); 
         manuallyvacuumDB();
+        } catch (SQLException e) 
+        {
+                    
+           System.out.println(e.getCause());            
+    }
       }
       
     /**
@@ -172,10 +235,17 @@ public class ConnectDB
         {
            getConnection();
          }
+          
+           try {
           PreparedStatement droptable;
           droptable = con.prepareStatement(" DROP TABLE if exists " + tablename + "");        
           droptable.execute();
           manuallyvacuumDB();
+          } catch (SQLException e) 
+        {
+                    
+           System.out.println(e.getCause());            
+    }
       }
       
     /**
@@ -189,10 +259,15 @@ public class ConnectDB
         {
            getConnection();
          }
-           
+           try {
           PreparedStatement vacuum;
           vacuum = con.prepareStatement(" VACUUM;");
           vacuum.execute();
+          } catch (SQLException e) 
+        {
+                    
+           System.out.println(e.getCause());            
+    }
       }
              
     /**
@@ -209,9 +284,16 @@ public class ConnectDB
         {
            getConnection();
          }
+      
+          try {
           PreparedStatement insertInt;
           insertInt = con.prepareStatement("insert into "+tablename+"("+attribute+") values("+value+") ");
           insertInt.execute();
+          } catch (SQLException e) 
+        {
+                    
+           System.out.println(e.getCause());            
+    }
       }
       
     /**
@@ -228,9 +310,16 @@ public class ConnectDB
         {
            getConnection();
          }
+      
+          try {
           PreparedStatement insertVarchar;
           insertVarchar = con.prepareStatement("insert into "+tablename+"("+attribute+") values("+value+") ");
           insertVarchar.execute();
+          } catch (SQLException e) 
+        {
+                    
+           System.out.println(e.getCause());            
+    }
       }
       
     /**
@@ -247,9 +336,17 @@ public class ConnectDB
         {
            getConnection();
         }
+      
+          try {
           PreparedStatement insertDouble;
           insertDouble = con.prepareStatement("insert into "+tablename+"("+attribute+") values("+value+") ");
           insertDouble.execute();
+          } catch (SQLException e) 
+        {
+                    
+           System.out.println(e.getCause());            
+    }
+          
       }
       
     /**
@@ -266,9 +363,16 @@ public class ConnectDB
         {
            getConnection();
         }
+      
+          try {
           PreparedStatement insertBoolean;
           insertBoolean = con.prepareStatement("insert into "+tablename+"("+attribute+") values("+value+") ");
           insertBoolean.execute();
+          } catch (SQLException e) 
+        {
+                    
+           System.out.println(e.getCause());            
+    }
       }
       
     /**
@@ -282,10 +386,16 @@ public class ConnectDB
           Statement state = con.createStatement();
           ResultSet res = state.executeQuery("select * from sqlite_master where type = 'table' and name ='"+tablename+"'");
           
+          try {
           while(res.next())
           {
               
           }
+          } catch (SQLException e) 
+        {
+                    
+           System.out.println(e.getCause());            
+    }
       }
 
       public void findontableitem(String tablename , String item , String parameter) throws SQLException, ClassNotFoundException
@@ -294,10 +404,16 @@ public class ConnectDB
         {
            getConnection();
         }
-
+         try {
          PreparedStatement findontableitem;
          findontableitem = con.prepareStatement("SELECT "+item+" FROM " + tablename + " WHERE " + parameter + " ");
          findontableitem.execute();
+         
+         } catch (SQLException e) 
+        {
+                    
+           System.out.println(e.getCause());            
+    }
     
     }
       public void displaySpecifictable(String tablename) throws SQLException, ClassNotFoundException
@@ -306,9 +422,16 @@ public class ConnectDB
         {
            getConnection();
         }
+          
+          try {
           PreparedStatement displaytable;
           displaytable = con.prepareStatement("select * from  " + tablename + " ");
-          displaytable.execute();        
+          displaytable.execute();
+          } catch (SQLException e) 
+        {
+                    
+           System.out.println(e.getCause());            
+    }
       }
       
      
@@ -318,9 +441,16 @@ public class ConnectDB
         {
            getConnection();
          }
+          
+          try {
           PreparedStatement displaytable;
           displaytable = con.prepareStatement("select * from  "+tablename+" where "+a+" ");
-          displaytable.execute();        
+          displaytable.execute();    
+          } catch (SQLException e) 
+        {
+                    
+           System.out.println(e.getCause());            
+    }
       }
       
         public void DisplayAllTables() throws SQLException, ClassNotFoundException
@@ -329,13 +459,20 @@ public class ConnectDB
         {
            getConnection();
         }
+       
+           try {
            DatabaseMetaData md = con.getMetaData();
            ResultSet rs = md.getTables(null, null, "%", null);           
             
            while(rs.next())
            {
                 System.out.println(rs.getString(3));
-           }   
+           }  
+           } catch (SQLException e) 
+        {
+                    
+           System.out.println(e.getCause());            
+    }
       }
 
          public ArrayList<String> DisplayAllTablesReturns() throws SQLException, ClassNotFoundException
@@ -353,7 +490,9 @@ public class ConnectDB
            {
                mylist.add(rs.getString(3));
            }
+           
          return (mylist);
+         
    
   }
 
@@ -389,9 +528,16 @@ public class ConnectDB
          {
            getConnection();
          }
+          
+          try {
           PreparedStatement displaytable;
           displaytable = con.prepareStatement("  "+a+" ");
-          displaytable.execute();        
+          displaytable.execute();
+          } catch (SQLException e) 
+        {
+                    
+           System.out.println(e.getCause());            
+    }
       }
         
         
@@ -413,8 +559,32 @@ public class ConnectDB
           }
           return sayı;
       }
+        
+        
+        
+        public int  getTotalRowTable(String tablename) throws SQLException, ClassNotFoundException
+      {
+          
+          if(con == null)
+        {
+           getConnection();
+         }
+          
+          int sayı = 0;
+          Statement  getTotalRow = ConnectDB.con.createStatement();
+          ResultSet rs =  getTotalRow.executeQuery("select count(*) from "+tablename+" ");
+          
+          if(rs.next())
+          {
+               sayı = rs.getInt(1);
+          }
+          return sayı;
+      }
+        
+        
+        
 
-   /*     
+    /* 
         public void insert(String tablename) throws ClassNotFoundException, SQLException
  {
             if(con == null)
@@ -472,5 +642,5 @@ public class ConnectDB
                    ctr = ctr + 1;                
                 }           
  }
-  */  
+ */
 }
