@@ -294,4 +294,63 @@ public class ConnectDB
           }
           return sayı;
       }
+   /*     
+        public void insert(String tablename) throws ClassNotFoundException, SQLException
+ {
+            if(con == null)
+     {
+           getConnection();
+     }
+            int numberofrows = getTotalRow();
+            int numberofcolumns = getTotalColumn();
+            ArrayList<String> return_types = new ArrayList<>();
+            int counter = 0;      
+            Statement state = ConnectDB.con.createStatement();
+
+                for(int i=0; i<return_types.size();i++)
+        { 
+                    ResultSet rs = state.executeQuery("PRAGMA table_info(" + tablename + ")");                   
+                    
+                    while(rs.next())
+           {     
+                        return_types.add(rs.getString(2));
+                        counter = counter + 1;
+           }
+        }
+                int ctr = 0;
+                PreparedStatement insert;
+                while(ctr <= counter)
+                {
+                   return_types.get(ctr);
+                   if(return_types.get(ctr) == "int")
+                   {
+                       PreparedStatement insertInt;
+                       insertInt = con.prepareStatement("  "++" ");
+                       insertInt.execute();
+                   }
+                   
+                   else if(return_types.get(ctr) == "varchar")
+                   {
+                       PreparedStatement insertVarchar;
+                       insertVarchar = con.prepareStatement("  "+ +" ");
+                       insertVarchar.execute();
+                   }
+                   
+                   else if(return_types.get(ctr) == "boolean")
+                   {
+                       PreparedStatement insertBoolean;
+                       insertBoolean = con.prepareStatement("  "++" ");
+                       insertBoolean.execute();
+                   }
+                   
+                   else if(return_types.get(ctr) == "real")
+                   {
+                       PreparedStatement insertReal;
+                       insertReal = con.prepareStatement("  "++" ");
+                       insertReal.execute();
+                   }
+                   ctr = ctr + 1;                
+                }           
+ }
+*/         
 }
