@@ -16,7 +16,7 @@ import java.util.ArrayList;
 
 /**
  *
- * @author oculus_team_4
+ * @author @Atahan Ekici
  */
 public class ConnectDB 
 {
