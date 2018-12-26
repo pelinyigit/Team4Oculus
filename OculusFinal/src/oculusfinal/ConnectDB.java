@@ -16,7 +16,7 @@ import java.util.ArrayList;
 
 /**
  *
- * @author @Atahan Ekici
+ * @author oculus_team_4
  */
 public class ConnectDB 
 {
@@ -413,6 +413,7 @@ public class ConnectDB
           }
           return sayı;
       }
+
    /*     
         public void insert(String tablename) throws ClassNotFoundException, SQLException
  {
@@ -471,5 +472,5 @@ public class ConnectDB
                    ctr = ctr + 1;                
                 }           
  }
-     */    
+  */  
 }
