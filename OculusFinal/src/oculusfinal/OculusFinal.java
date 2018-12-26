@@ -12,21 +12,20 @@ public class OculusFinal
         
         db.getConnection();
 /*
-        db.createtable("cars");
-        db.createtable("musics");
-        db.createtable("vosvos");
-        db.createtable("graphicscards");
-        db.renametable("vosvos", "araba");
-        db.createtable("god");
-        db.addAttributeInt("god", "power");
+        db.createtable("rap");
+        db.createtable("Vosvos");
+        db.createtable("Graphicscards");
+        db.createtable("Books");
         
-  */      
+        db.renametable("vosvos", "Cars");
+        db.renametable("rap", "Musics");
+*/   
         db.DisplayAllTables();
-     
-        System.out.println(db.getTotalRow());    
+        
         System.out.println(db.DisplayAllTablesReturns());
-        System.out.println(db.getTotalRow());
-
+        System.out.println(db.getTotalColumn());
+        System.out.println(db.getTotalRow()); 
+        
 /* 
         db.Terminal("");
         db.Terminal("");
@@ -35,6 +34,6 @@ public class OculusFinal
         db.Terminal("");
         db.Terminal("");
         db.Terminal("");
-       */
+*/
     } 
 }
